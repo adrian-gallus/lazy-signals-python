@@ -10,10 +10,17 @@ def t():
 h = derived(lambda: t.value + 1)
 
 @effect
-def logger():
-    print("got s =", s.value, "and h =", h.value)
+def status():
+    # NOTE this has no effect on update
+    print(f"status: got {s=} and {h=}")
 
-effect(lambda: print("with t =", t.value))
+
+@effect
+def logger():
+    # NOTE this is called on each update
+    print(f"logger: got {s.value=} and h =", h)
+
+effect(lambda: print(f"with {t=}"))
 
 print("set s = 3")
 s.value = 3
@@ -21,7 +28,7 @@ s.value = 3
 try:
     @effect
     def exception():
-        print("ok", t.value)
+        print("raising exception on t =", t)
         raise Exception("test")
 except:
     pass
@@ -30,5 +37,4 @@ try:
     print("set s = 4")
     s.value = 4
 except Exception as e:
-    print("handled exception", e)
-
+    print("handling exception(s)", e)
