@@ -11,7 +11,7 @@ from pathlib import Path
 
 sys.path.append(str(Path('../../src/').resolve()))
 
-project = 'signals'
+project = 'lazy-signals'
 copyright = '2025, Adrian Gallus'
 author = 'Adrian Gallus'
 

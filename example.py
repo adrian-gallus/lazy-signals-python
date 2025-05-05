@@ -1,6 +1,7 @@
 
-from lib.signals import Signal, effect, derived
+from lazysignals import *
 
+### BASICS
 
 print()
 s = Signal(1)
@@ -17,8 +18,11 @@ def logger2():
 
 @effect
 def logger3():
-    # NOTE this has no effect on update
+    # NOTE this is NOT called on updates
     print(f"logger 3: got {s=}")
+
+# NOTE this is NOT called on updates
+print(f"logger 4: got s={s}")
 
 s.value = 2
 print()

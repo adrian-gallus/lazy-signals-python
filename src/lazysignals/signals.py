@@ -5,7 +5,7 @@
 # TODO allow manual dependency declaration
 # TODO an effect should be able to make _atomic_ updates (update multiple signals at once)
 # TODO make a debugging tool to view the dependency tree
-# TODO provide _eager_ and _lazy_ signals to compensate overhead
+# TODO provide _eager_ and _lazy_ signals to compensate overhead; benchmark
 
 # NOTE an effect may become dirty again if there are cyclic dependnecies through side effects; hence we must reset the flag before running the effect
 
