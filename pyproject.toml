@@ -3,7 +3,7 @@ requires = ["setuptools >= 77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "lazysignals"
+name = "lazy-signals"
 version = "0.1.0"
 authors = [
     { name="Adrian Gallus", email="mail@agallus.de" },
