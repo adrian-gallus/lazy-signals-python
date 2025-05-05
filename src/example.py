@@ -18,6 +18,17 @@ effect(lambda: print("with t =", t.value))
 print("set s = 3")
 s.value = 3
 
-print("set s = 4")
-s.value = 4
+try:
+    @effect
+    def exception():
+        print("ok", t.value)
+        raise Exception("test")
+except:
+    pass
+
+try:
+    print("set s = 4")
+    s.value = 4
+except:
+    print("handled exception")
 
