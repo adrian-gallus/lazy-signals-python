@@ -54,6 +54,12 @@ class Signal:
         self._value = value
         self._subscribers = set()
 
+    def __str__(self):
+        return str(self.value)
+
+    def __repr__(self):
+        return f"Signal({self._value})"
+
     @property
     def value(self):
         dependent = Dependent()
