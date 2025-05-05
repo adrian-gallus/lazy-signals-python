@@ -14,25 +14,38 @@ class SingletonMeta(type):
         return cls._instances[cls]
 
 
+class Node():
+
+    def __init__(self, fn):
+        self._dependencies = set()
+        self._fn = fn
+
+    def add_dependency(self, dependency):
+        self._dependencies.add(dependency)
+
+    def notify(self):
+        effect(self._fn, node=self)
+
+
 class Dependent(metaclass=SingletonMeta):
 
     def __init__(self):
-        self.reset()
+        self._values = []
 
-    def reset(self):
-        self._value = None
+    def pop(self):
+        self._values.pop()
 
-    def set(self, value):
-        assert not self.is_set
-        self._value = value
+    def push(self, value, node):
+        self._values.append(node if node else Node(value))
 
     @property
     def is_set(self):
-        return self._value is not None
+        return len(self._values) > 0
 
-    @property
-    def current(self):
-        return self._value
+    def get(self, dependency):
+        value = self._values[-1]
+        value.add_dependency(dependency)
+        return value
 
 
 class Signal:
@@ -45,7 +58,7 @@ class Signal:
     def value(self):
         dependent = Dependent()
         if dependent.is_set:
-            self._subscribers.add(dependent.current)
+            self._subscribers.add(dependent.get(self))
         return self._value
 
     @value.setter
@@ -54,15 +67,15 @@ class Signal:
 
     def set(self, value):
         self._value = value
-        for subscriber in self._subscribers:
-            subscriber()
+        for subscriber in list(self._subscribers):
+            subscriber.notify()
 
 
 # NOTE may be used as decorator
-def effect(fn):
-    dependent = fn
+def effect(fn, node=None):
+    Dependent().push(fn, node)
     fn()
-    dependent = None
+    Dependent().pop()
 
 
 # NOTE may be used as decorator, similar to @property
