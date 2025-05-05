@@ -4,7 +4,35 @@
 # TODO make async and lazy
 
 
-dependent = None
+class SingletonMeta(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            instance = super().__call__(*args, **kwargs)
+            cls._instances[cls] = instance
+        return cls._instances[cls]
+
+
+class Dependent(metaclass=SingletonMeta):
+
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        self._value = None
+
+    def set(self, value):
+        assert not self.is_set
+        self._value = value
+
+    @property
+    def is_set(self):
+        return self._value is not None
+
+    @property
+    def current(self):
+        return self._value
 
 
 class Signal:
@@ -15,8 +43,9 @@ class Signal:
 
     @property
     def value(self):
-        if dependent is not None:
-            self._subscribers.add(dependent)
+        dependent = Dependent()
+        if dependent.is_set:
+            self._subscribers.add(dependent.current)
         return self._value
 
     @value.setter
