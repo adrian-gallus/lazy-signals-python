@@ -1,7 +1,7 @@
 
-# Overview
+# Lazy Signals 🪢
 
-`lazy-signals` is a python library to run effects on value changes. It employs dependency discovery and is lazy. It is conceptually inspired by Signal in JavaScript.
+`lazysignals` is a python library to run effects on state changes. It employs dependency discovery and is lazy. It is conceptually inspired by Signal in JavaScript.
 
 ## Example
 
@@ -27,4 +27,4 @@ perform some updates to `s`
     s.value = 5  # no change, no output
     s.value = 6  # output: "parity: even"
 
-Have a look at `example.py` for more; run with `pipenv run example`
+Have a look at `example.py` for more; run with `pipenv install` (to locally install this library) and `pipenv run example`.
