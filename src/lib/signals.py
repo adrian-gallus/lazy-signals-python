@@ -74,8 +74,12 @@ class Signal:
 # NOTE may be used as decorator
 def effect(fn, node=None):
     Dependent().push(fn, node)
-    fn()
-    Dependent().pop()
+    try:
+        fn()
+    except:
+        raise
+    finally:
+        Dependent().pop()
 
 
 # NOTE may be used as decorator, similar to @property
