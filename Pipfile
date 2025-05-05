@@ -9,7 +9,7 @@ example = "python3 example.py"
 package = "python3 -m build"
 
 [packages]
-lazysignals = {file = ".", editable = true}
+lazy-signals = {file = ".", editable = true}
 
 [dev-packages]
 sphinx = "*"
