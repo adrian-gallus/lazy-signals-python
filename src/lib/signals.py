@@ -1,7 +1,7 @@
 
 # Copyright 2025, Adrian Gallus
 
-# TODO make async and lazy
+# TODO make lazy, threadsafe, and async
 
 
 class SingletonMeta(type):
@@ -67,8 +67,14 @@ class Signal:
 
     def set(self, value):
         self._value = value
+        exceptions = []
         for subscriber in list(self._subscribers):
-            subscriber.notify()
+            try:
+                subscriber.notify()
+            except Exception as e:
+                exceptions.append(e)
+        if len(exceptions) > 0:
+            raise Exception(*exceptions)
 
 
 # NOTE may be used as decorator
