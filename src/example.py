@@ -29,6 +29,6 @@ except:
 try:
     print("set s = 4")
     s.value = 4
-except:
-    print("handled exception")
+except Exception as e:
+    print("handled exception", e)
 
