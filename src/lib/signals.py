@@ -2,6 +2,7 @@
 # Copyright 2025, Adrian Gallus
 
 # TODO make lazy, threadsafe, and async
+# TODO an effect should be able to make _atomic_ updates (update multiple signals at once)
 
 
 class SingletonMeta(type):
@@ -14,7 +15,7 @@ class SingletonMeta(type):
         return cls._instances[cls]
 
 
-class Node():
+class Effect():
 
     def __init__(self, fn):
         self._dependencies = set()
@@ -24,7 +25,7 @@ class Node():
         self._dependencies.add(dependency)
 
     def notify(self):
-        effect(self._fn, node=self)
+        effect(self._fn, effect=self)
 
 
 class Dependent(metaclass=SingletonMeta):
@@ -35,8 +36,8 @@ class Dependent(metaclass=SingletonMeta):
     def pop(self):
         self._values.pop()
 
-    def push(self, value, node):
-        self._values.append(node if node else Node(value))
+    def push(self, effect):
+        self._values.append(effect)
 
     @property
     def is_set(self):
@@ -84,8 +85,8 @@ class Signal:
 
 
 # NOTE may be used as decorator
-def effect(fn, node=None):
-    Dependent().push(fn, node)
+def effect(fn, effect=None):
+    Dependent().push(effect or Effect(fn))
     try:
         fn()
     except:
