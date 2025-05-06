@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [scripts]
-docs = "sh -c 'cd doc; make clean html; xdg-open build/html/index.html'"
+docs = "sh -c 'cd docs; make clean html; xdg-open build/html/index.html'"
 example = "python3 example.py"
 package = "python3 -m build"
 
