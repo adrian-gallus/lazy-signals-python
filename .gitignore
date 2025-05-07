@@ -1,9 +1,10 @@
 
 **/__pycache__
 
-doc/build/
-doc/source/generated/
+docs/_build/
 
 *.egg-info
 build/
 dist/
+
+Pipfile.lock

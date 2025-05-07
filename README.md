@@ -1,7 +1,12 @@
 
 # Lazy Signals 🪢
 
-`lazysignals` is a python library to run effects on state changes. It employs dependency discovery and is lazy. It is conceptually inspired by Signal in JavaScript.
+[![GitHub](https://img.shields.io/github/license/adrian-gallus/lazy-signals-python)](https://github.com/adrian-gallus/lazy-signals-python)
+[![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/adrian-gallus/lazy-signals-python/release.yaml)](https://github.com/adrian-gallus/lazy-signals-python)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/lazy-signals)](https://pypi.org/project/lazy-signals/)
+[![PyPI - Version](https://img.shields.io/pypi/v/lazy-signals)](https://pypi.org/project/lazy-signals/)
+
+`lazysignals` is a Python library that runs effects whenever state changes. It employs dependency discovery and updates are lazy. The library is conceptually inspired by [signals](https://github.com/tc39/proposal-signals) in JavaScript.
 
 ## Example
 
@@ -15,7 +20,7 @@ derive a signal that checks the parity of `s`
 
     p = derived(lambda: s.value % 2 == 0)
 
-log the parity of `s` to the console
+log the parity `p` to the console
 
     effect(lambda: print(f"parity:", "even" if p.value else "odd"))
 

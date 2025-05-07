@@ -6,11 +6,6 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-import sys
-from pathlib import Path
-
-sys.path.append(str(Path('../../src/').resolve()))
-
 project = 'lazy-signals'
 copyright = '2025, Adrian Gallus'
 author = 'Adrian Gallus'
@@ -21,12 +16,13 @@ author = 'Adrian Gallus'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
+    'autoapi.extension',
+    'sphinx_mdinclude',
 ]
 
-templates_path = ['_templates']
-exclude_patterns = []
-
+autoapi_dirs = ['../src/']
 autosummary_generate = True
+add_module_names = False
 #autodoc_default_options = {
 #    'members': True,
 #    'undoc-members': True,  # Include members without docstrings
@@ -35,13 +31,12 @@ autosummary_generate = True
 #    'inherited-members': True,  # Include inherited methods
 #}
 
-
+templates_path = ['_templates']
+exclude_patterns = []
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-#html_theme = 'furo'
 html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']
-
-
+html_static_path = ["_static"]
+html_css_files = ["css/custom.css"]

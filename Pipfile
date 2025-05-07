@@ -4,7 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [scripts]
-docs = "sh -c 'cd docs; make clean html; xdg-open build/html/index.html'"
+docs = "sh -c 'cd docs; make clean html'"
+read = "xdg-open docs/_build/html/index.html"
 example = "python3 example.py"
 package = "python3 -m build"
 
@@ -13,9 +14,10 @@ lazy-signals = {file = ".", editable = true}
 
 [dev-packages]
 sphinx = "*"
+sphinx-autoapi = "*"
+sphinx-mdinclude = "*"
 sphinx-rtd-theme = "*"
 build = "*"
-twine = "*"
 
 [requires]
 python_version = "3.13"

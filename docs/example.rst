@@ -1,32 +1,20 @@
 
-Lazy Signals
-============
+First Example
+=============
 
-This is a python library to run effects on value changes. It employs dependency discovery and is lazy. It is conceptually inspired by Signal in JavaScript.
+First, we must include the exposed classes and functions:
 
+.. code-block:: python
+    
+    from lazysignals import Signal, effect, derived
 
-.. toctree::
-   :hidden:
-   :maxdepth: 1
-
-   library
-
-.. contents:: Table of Contents
-   :depth: 1
-   :local:
-   :backlinks: none
-
-
-Example
--------
-
-First, define a new signal ``s``, holding the initial value ``1``:
+Let us define our first signal ``s``, holding the initial value ``1``:
 
 .. code-block:: python
 
     s = Signal(1)
 
-Next, derive a signal that checks the parity of ``s``:
+Next, derive a signal ``p`` that checks the parity of ``s``:
 
 .. code-block:: python
 
@@ -48,5 +36,4 @@ Finally, perform some updates to ``s``:
     s.value = 5  # no change (p.value was False already), no output
     s.value = 6  # output: "parity: even"
 
-Note how the effect only ran for those changes that mattered.
-
+Note that we did not need to mention the dependency on ``s`` anywhere within in the effect and how the effect only ran for those changes that mattered.
