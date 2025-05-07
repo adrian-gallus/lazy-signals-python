@@ -1,6 +1,6 @@
 
-First Example
-=============
+Example
+=======
 
 First, we must include the exposed classes and functions:
 

@@ -21,6 +21,7 @@ extensions = [
 ]
 
 autoapi_dirs = ['../src/']
+autoapi_add_toctree_entry = False
 autosummary_generate = True
 add_module_names = False
 #autodoc_default_options = {

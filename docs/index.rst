@@ -21,14 +21,10 @@ Contents
    installation
    example
    lazysignals
+
    changelog
-   licence
    contributing
+   licence
+   reference
+   genindex
 
-
-Search for a specific page:
----------------------------
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
