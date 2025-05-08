@@ -1,6 +1,6 @@
 
-Example
-=======
+Example Usage
+=============
 
 First, we must include the exposed classes and functions:
 
@@ -36,4 +36,10 @@ Finally, perform some updates to ``s``:
     s.value = 5  # no change (p.value was False already), no output
     s.value = 6  # output: "parity: even"
 
-Note that we did not need to mention the dependency on ``s`` anywhere within in the effect and how the effect only ran for those changes that mattered.
+.. note::
+    We did not need to mention the dependency on ``s`` anywhere within in the effect.
+    Yet changes to ``s.value`` caused ``p.value`` to update and the effect to run.
+    
+.. note::
+    The effect only ran for those changes that mattered.
+    Whenever ``p.value`` stayed the same (because ``s.value`` did not change or its parity did not flip), no effect was run.

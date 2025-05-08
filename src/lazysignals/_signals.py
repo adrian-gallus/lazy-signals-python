@@ -24,8 +24,8 @@ def is_added(s, x):
     """
     Adds an element to a set and returns if it was not already present.
     
-    :param: ``s``: The set to add the element to.
-    :param: ``x``: The element to add.
+    :param s: The set to add the element to.
+    :param x: The element to add.
     :returns: ``True`` if ``x`` was not in ``s``, ``False`` otherwise.
     """
     if x not in s:
@@ -99,6 +99,7 @@ class Effect():
                 Dependent().pop()
 
 
+# TODO hide .value by making the class a wrapper
 class Signal:
     """A container to hold a reactive value."""
 
@@ -150,7 +151,7 @@ def effect(fn):
     """
     Run ``fn()`` whenever (relevant) state changes.
 
-    :param: ``fn``: The function to run on state changes.
+    :param fn: The function to run on state changes.
     :returns: The return value of ``fn()``.
     """
     return Effect(fn).update()
@@ -161,7 +162,7 @@ def derived(fn):
     """
     Define a new signal whose value is computed by ``fn()``.
     
-    :param: ``fn``: A function without arguments that returns a value.
+    :param fn: A function to compute the value from.
     :returns: A new ``Signal``.
     """
     derived = Signal()

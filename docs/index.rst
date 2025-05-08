@@ -10,6 +10,14 @@ The library is conceptually inspired by `signals <https://github.com/tc39/propos
 This project is released on `GitHub <https://github.com/adrian-gallus/lazy-signals-python/>`_ under the :doc:`licence`.
 
 
+What this library is.
+   - A simple reactive programming library.
+
+What this library isn't.
+   - An event framework.
+   - A lazy evaluation framework.
+
+
 Contents
 --------
 
