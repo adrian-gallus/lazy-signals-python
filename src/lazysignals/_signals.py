@@ -168,19 +168,6 @@ class Signal:
         if len(exceptions) > 0:
             raise Exception(*exceptions)
 
-    def set(self, value):
-        """
-        equivalent to ``self.value = value``
-
-        .. tip::
-            While python forbids assignment `statements` ``s.value = new_value`` in lambda `expressions`, you can use the ``s.set(new_value)`` `expression` instead.
-            So ``lambda: s.set(new_value)`` is a valid python `expression`.
-
-        .. note::
-            While Python 3.8 introduces the walrus operator (``:=``), which would also be an `expression`, it cannot be used with `attributes` like ``Signal.value``.
-        """
-        self.value = value
-
 
 def effect(fn):
     """
@@ -205,7 +192,12 @@ def derived(fn):
     .. tip::
         Use as a function decorator.
     """
+    
     derived = Signal()
-    effect(lambda: derived.set(fn()))
+    
+    @effect
+    def update():
+        derived.value = fn()
+    
     return derived
 

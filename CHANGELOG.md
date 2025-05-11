@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
  - Sphinx Documentation
 
+### Removed
+ - `Signal.set`: this was just a hack
+
 
 ## [0.1.0] - 2025-05-06
 
