@@ -29,6 +29,7 @@ Contents
    installation
    example
    lazysignals
+   internals
 
    changelog
    contributing

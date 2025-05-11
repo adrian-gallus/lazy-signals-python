@@ -1,21 +1,36 @@
 
 # Copyright 2025, Adrian Gallus
 
+# TODO write tests
+# TODO add type hints
+
 # TODO make threadsafe and async
 # TODO allow manual dependency declaration
-# TODO an effect should be able to make _atomic_ updates (update multiple signals at once)
+# TODO an effect should be able to make _atomic_ updates (update multiple signals at once); just run effects to completion before propagating changes?
 # TODO make a debugging tool to view the dependency tree
 # TODO provide _eager_ and _lazy_ signals to compensate overhead; benchmark
 
 # NOTE an effect may become dirty again if there are cyclic dependnecies through side effects; hence we must reset the flag before running the effect
 
 class SingletonMeta(type):
+    """
+    A metaclass for creating singleton classes.
+
+    This metaclass ensures that only one instance of a class is created, and that all subsequent calls to the constructor return the same instance.
+    """
+
     _instances = {}
 
     def __call__(cls, *args, **kwargs):
+        """
+        Create and store a new instance of the class if it doesn't exist yet, or return the existing instance.
+        """
+
         if cls not in cls._instances:
+            # create a new instance
             instance = super().__call__(*args, **kwargs)
             cls._instances[cls] = instance
+        
         return cls._instances[cls]
 
 
@@ -28,6 +43,7 @@ def is_added(s, x):
     :param x: The element to add.
     :returns: ``True`` if ``x`` was not in ``s``, ``False`` otherwise.
     """
+
     if x not in s:
         s.add(x)
         return True
@@ -36,6 +52,9 @@ def is_added(s, x):
 
 # avoid duplicate updates per signal propagation pass
 class Updated(metaclass=SingletonMeta):
+    """
+    A singleton to track the events that have been updated.
+    """
 
     def __init__(self):
         self._signals = set()
@@ -57,6 +76,9 @@ class Updated(metaclass=SingletonMeta):
 
 
 class Dependent(metaclass=SingletonMeta):
+    """
+    A singleton to track the signals that have been accessed while executing an effect.
+    """
 
     def __init__(self):
         self._effects = []
@@ -79,6 +101,7 @@ class Dependent(metaclass=SingletonMeta):
 
 # run updates (but only once per change)
 class Effect():
+    """A container to hold an effect function."""
 
     def __init__(self, fn):
         self._dependencies = set()
@@ -117,6 +140,10 @@ class Signal:
 
     @property
     def value(self):
+        """
+        :getter: gets the current value, registering the current effect as a dependent
+        :setter: sets the current value, notifying all dependent effects if it changed
+        """
         dependent = Dependent()
         if dependent.is_set:
             fresh, effect = dependent.get(self)
@@ -126,10 +153,6 @@ class Signal:
 
     @value.setter
     def value(self, value):
-        self.set(value)
-
-    # NOTE assignment `x.value = a` is not an expression, but `x.set(a)` is; this is useful for lambdas
-    def set(self, value):
         if self._value == value:
             return
         self._value = value
@@ -145,25 +168,42 @@ class Signal:
         if len(exceptions) > 0:
             raise Exception(*exceptions)
 
+    def set(self, value):
+        """
+        equivalent to ``self.value = value``
 
-# NOTE may be used as decorator
+        .. tip::
+            While python forbids assignment `statements` ``s.value = new_value`` in lambda `expressions`, you can use the ``s.set(new_value)`` `expression` instead.
+            So ``lambda: s.set(new_value)`` is a valid python `expression`.
+
+        .. note::
+            While Python 3.8 introduces the walrus operator (``:=``), which would also be an `expression`, it cannot be used with `attributes` like ``Signal.value``.
+        """
+        self.value = value
+
+
 def effect(fn):
     """
     Run ``fn()`` whenever (relevant) state changes.
 
     :param fn: The function to run on state changes.
     :returns: The return value of ``fn()``.
+
+    .. tip::
+        Use as a function decorator.
     """
     return Effect(fn).update()
 
 
-# NOTE may be used as decorator, similar to @property
 def derived(fn):
     """
     Define a new signal whose value is computed by ``fn()``.
     
     :param fn: A function to compute the value from.
     :returns: A new ``Signal``.
+
+    .. tip::
+        Use as a function decorator.
     """
     derived = Signal()
     effect(lambda: derived.set(fn()))

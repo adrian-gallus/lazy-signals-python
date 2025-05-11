@@ -16,7 +16,8 @@ lazy-signals = {file = ".", editable = true}
 sphinx = "*"
 sphinx-autoapi = "*"
 sphinx-mdinclude = "*"
-sphinx-rtd-theme = "*"
+#sphinx-rtd-theme = "*"
+furo = "*"
 build = "*"
 
 [requires]

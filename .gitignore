@@ -2,6 +2,7 @@
 **/__pycache__
 
 docs/_build/
+docs/autoapi/
 
 *.egg-info
 build/
