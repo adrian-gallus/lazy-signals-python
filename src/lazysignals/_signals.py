@@ -12,45 +12,9 @@
 
 # NOTE an effect may become dirty again if there are cyclic dependnecies through side effects; hence we must reset the flag before running the effect
 
-class SingletonMeta(type):
-    """
-    A metaclass for creating singleton classes.
-
-    This metaclass ensures that only one instance of a class is created, and that all subsequent calls to the constructor return the same instance.
-    """
-
-    _instances = {}
-
-    def __call__(cls, *args, **kwargs):
-        """
-        Create and store a new instance of the class if it doesn't exist yet, or return the existing instance.
-        """
-
-        if cls not in cls._instances:
-            # create a new instance
-            instance = super().__call__(*args, **kwargs)
-            cls._instances[cls] = instance
-        
-        return cls._instances[cls]
+from ._utils import SingletonMeta, is_added
 
 
-# unfortunately the .add method does not return its effect
-def is_added(s, x):
-    """
-    Adds an element to a set and returns if it was not already present.
-    
-    :param s: The set to add the element to.
-    :param x: The element to add.
-    :returns: ``True`` if ``x`` was not in ``s``, ``False`` otherwise.
-    """
-
-    if x not in s:
-        s.add(x)
-        return True
-    return False
-
-
-# avoid duplicate updates per signal propagation pass
 class Updated(metaclass=SingletonMeta):
     """
     A singleton to track the events that have been updated.
@@ -92,14 +56,13 @@ class Dependent(metaclass=SingletonMeta):
         fresh = effect.add_dependency(dependency)
         return fresh, effect
     
-    def pop(self):
-        self._effects.pop()
-
-    def push(self, effect):
+    def enter(self, effect):
         self._effects.append(effect)
 
+    def leave(self):
+        self._effects.pop()
 
-# run updates (but only once per change)
+
 class Effect():
     """A container to hold an effect function."""
 
@@ -113,16 +76,16 @@ class Effect():
     def update(self):
         updated = Updated()
         if updated.submit(self):
-            Dependent().push(self)
+            Dependent().enter(self)
             try:
                 return self._fn()
             except:
                 raise
             finally:
-                Dependent().pop()
+                Dependent().leave()
 
 
-# TODO hide .value by making the class a wrapper
+# TODO hide .value by making the class a decorator
 class Signal:
     """A container to hold a reactive value."""
 
@@ -144,11 +107,13 @@ class Signal:
         :getter: gets the current value, registering the current effect as a dependent
         :setter: sets the current value, notifying all dependent effects if it changed
         """
+
         dependent = Dependent()
         if dependent.is_set:
             fresh, effect = dependent.get(self)
             if fresh: # avoid duplicates
                 self._dependents.append(effect)
+
         return self._value
 
     @value.setter
@@ -156,7 +121,9 @@ class Signal:
         if self._value == value:
             return
         self._value = value
+
         exceptions = []
+
         updated = Updated()
         updated.enter(self)
         for dependent in list(self._dependents):
@@ -165,6 +132,7 @@ class Signal:
             except Exception as e:
                 exceptions.append(e)
         updated.leave(self)
+
         if len(exceptions) > 0:
             raise Exception(*exceptions)
 
