@@ -8,6 +8,8 @@
 
 `lazysignals` is a Python library that runs effects whenever state changes. It employs dependency discovery and updates are lazy. The library is conceptually inspired by [signals](https://github.com/tc39/proposal-signals) in JavaScript.
 
+Please refer to our [latest documentation](https://adrian-gallus.github.io/lazy-signals-python/).
+
 ## Example
 
 The framework runs relevant effects whenever some state changes:

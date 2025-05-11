@@ -35,6 +35,7 @@ license = "MIT"
 license-files = ["LICENCE.md"]
 
 [project.urls]
-Homepage = "https://github.com/adrian-gallus/lazy-signals-python"
+Documentation = "https://adrian-gallus.github.io/lazy-signals-python/"
+Repository = "https://github.com/adrian-gallus/lazy-signals-python"
+Changelog = "https://adrian-gallus.github.io/lazy-signals-python/changelog.html"
 Issues = "https://github.com/adrian-gallus/lazy-signals-python/issues"
-#Changelog = "https://github.com/adrian-gallus/lazy-signals-python/CHANGELOG.md"
